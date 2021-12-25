@@ -1,23 +1,42 @@
 package avito.converter.service;
 
+import avito.converter.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CookiesHandler {
-    public Cookie getUserAliasFromCookies(HttpServletRequest request){
-        Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("alias"))
-                return cookie;
+    private final UserRepository userRepository;
+    private final String COOKIE_NAME="alias";
+    private final  int COOKIE_AGE=60*60*24;
+
+
+    public ResponseCookie getCookieByAlias(String alias){
+        String value = getAliasValueFromCookie(alias);
+        return  ResponseCookie.from(COOKIE_NAME,value)
+                .maxAge(COOKIE_AGE)
+                .build();
+    }
+
+    private String getAliasValueFromCookie(String alias){
+        if (alias!=null){
+            return alias;
         }
-        return addingAliasCookie();
+        else{
+            return addingAliasValueCookie();
+        }
     }
 
-    private Cookie addingAliasCookie() {
-        return null;
-    }
 
+    private String addingAliasValueCookie() {
+        List<String> aliasList = userRepository.findAllByAlias();
+        int size = aliasList.size();
+        Cookie alias = new Cookie(COOKIE_NAME, "user_" + size);
+        return alias.getValue();
+    }
 }

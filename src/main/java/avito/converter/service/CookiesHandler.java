@@ -1,6 +1,6 @@
 package avito.converter.service;
 
-import avito.converter.repository.UserRepository;
+import avito.converter.repository.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class CookiesHandler {
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final String COOKIE_NAME="alias";
     private final  int COOKIE_AGE=60*60*24;
 
@@ -37,7 +37,7 @@ public class CookiesHandler {
 
 
     private String addingAliasValueCookie() {
-        List<String> aliasList = userRepository.findAllByAlias();
+        List<String> aliasList = userService.getAllUsersByAlias();
         int size = aliasList.size();
         log.info("User not found. Creating new cookie");
         Cookie alias = new Cookie(COOKIE_NAME, "user_" + size);

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -14,14 +15,19 @@ public class UserService{
     private final UserRepository userRepository;
 
 
-    public void createNewUser(String alias){
+    public User createNewUser(String alias){
         User user = new User();
         user.setAlias(alias);
         log.info("Created new user with name {}",alias);
         userRepository.save(user);
+        return user;
     }
 
-    public List<String> getAllUsersByAlias(){
-        return userRepository.findAllByAlias();
+    public List<String> getAllUsersAlias(){
+        return userRepository.findAllAlias();
+    }
+
+    public Optional<User> getUserByAlias(String alias){
+        return userRepository.findByAlias(alias);
     }
 }

@@ -1,6 +1,8 @@
 package avito.converter.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.net.URL;
@@ -8,6 +10,8 @@ import java.net.URL;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PrettyUrl{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,5 +22,5 @@ public class PrettyUrl{
 
     private URL oldUrl;
 
-    private URL newUrl;
+    private String newUrl;
 }

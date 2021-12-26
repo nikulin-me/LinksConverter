@@ -36,7 +36,7 @@ public class CookiesHandler {
     }
 
     private String addingAliasValueCookie() {
-        List<String> aliasList = userService.getAllUsersByAlias();
+        List<String> aliasList = userService.getAllUsersAlias();
         int size = aliasList.size();
 
         log.info("User not found. Creating new cookie");

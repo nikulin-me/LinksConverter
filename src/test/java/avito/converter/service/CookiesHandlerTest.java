@@ -30,7 +30,7 @@ class CookiesHandlerTest {
     @Test
     void shouldReturnNewCookie() {
         //given
-        given(service.getAllUsersByAlias()).willReturn(List.of());
+        given(service.getAllUsersAlias()).willReturn(List.of());
 
 
         //when
@@ -45,7 +45,7 @@ class CookiesHandlerTest {
     @Test
     void shouldReturnOldCookie(){
         //given
-        lenient().when(service.getAllUsersByAlias()).thenReturn(List.of("user_1"));
+        lenient().when(service.getAllUsersAlias()).thenReturn(List.of("user_1"));
 
         ResponseCookie cookie=handler.getCookieByAlias("user_1");
         ResponseCookie expectedCookie=ResponseCookie.from("alias","user_1").maxAge(60*60*24).build();

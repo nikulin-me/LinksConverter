@@ -18,10 +18,10 @@ public class ConverterController {
     private final  ConverterService converterService;
 
     @GetMapping
-    public ResponseEntity<String> getPrettyUrl(@RequestParam("url") URL url,
+    public ResponseEntity<URL> getPrettyUrl(@RequestParam("url") URL url,
                                                   @CookieValue(name = "alias") String alias){
         ResponseCookie cookie=cookiesHandler.getCookieByAlias(alias);
-        String prettyUrl = converterService.getPrettyUrl(alias,url);
+        URL prettyUrl = converterService.getPrettyUrl(alias,url);
 
 
         return ResponseEntity.ok()

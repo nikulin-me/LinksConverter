@@ -35,12 +35,15 @@ public class CookiesHandler {
         }
     }
 
-
     private String addingAliasValueCookie() {
         List<String> aliasList = userService.getAllUsersByAlias();
         int size = aliasList.size();
+
         log.info("User not found. Creating new cookie");
-        Cookie alias = new Cookie(COOKIE_NAME, "user_" + size);
+        String aliasUser="user_"+size;
+        userService.createNewUser(aliasUser);
+        Cookie alias = new Cookie(COOKIE_NAME, aliasUser);
+
         return alias.getValue();
     }
 }

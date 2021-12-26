@@ -1,6 +1,7 @@
 package avito.converter.controller;
 
 import avito.converter.domain.PrettyUrl;
+import avito.converter.service.ConverterService;
 import avito.converter.service.CookiesHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -15,14 +16,17 @@ import java.net.URL;
 @RequiredArgsConstructor
 public class ConverterController {
     private final CookiesHandler cookiesHandler;
+    private final  ConverterService converterService;
 
     @GetMapping
-    public ResponseEntity<PrettyUrl> getPrettyUrl(@RequestParam("url") URL url,
+    public ResponseEntity<String> getPrettyUrl(@RequestParam("url") URL url,
                                                   @CookieValue(name = "alias") String alias){
         ResponseCookie cookie=cookiesHandler.getCookieByAlias(alias);
+        String prettyUrl = converterService.getUrlPretty(url);
+
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE,cookie.toString())
-                .body(null);
+                .body(prettyUrl);
     }
 }

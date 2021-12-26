@@ -13,6 +13,7 @@ import java.util.List;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class CookiesHandlerTest {
@@ -38,6 +39,7 @@ class CookiesHandlerTest {
         //then
         ResponseCookie expectedCookie=ResponseCookie.from("alias","user_0").maxAge(60*60*24).build();
         then(cookie).isEqualTo(expectedCookie);
+        verify(service).createNewUser("user_0");
     }
 
     @Test

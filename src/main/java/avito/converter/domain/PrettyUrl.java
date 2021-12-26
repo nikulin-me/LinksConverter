@@ -17,8 +17,9 @@ public class PrettyUrl{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private User user;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user   ;
 
     private URL oldUrl;
 

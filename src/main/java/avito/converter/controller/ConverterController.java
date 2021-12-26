@@ -8,6 +8,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 @RestController
@@ -19,7 +20,7 @@ public class ConverterController {
 
     @GetMapping
     public ResponseEntity<URL> getPrettyUrl(@RequestParam("url") URL url,
-                                                  @CookieValue(name = "alias") String alias){
+                                                  @CookieValue(name = "alias") String alias) throws MalformedURLException {
         ResponseCookie cookie=cookiesHandler.getCookieByAlias(alias);
         URL prettyUrl = converterService.getPrettyUrl(alias,url);
 

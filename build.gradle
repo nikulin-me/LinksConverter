@@ -22,7 +22,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot'
 
 
-
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
@@ -31,6 +30,8 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.18.22'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-test'
+
+    implementation 'org.postgresql:postgresql'
 }
 
 test {

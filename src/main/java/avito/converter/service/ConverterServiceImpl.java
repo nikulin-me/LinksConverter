@@ -11,10 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Slf4j
 @Service
@@ -26,21 +24,33 @@ public class ConverterServiceImpl implements ConverterService {
     private final UserService userService;
 
     @Override
-    public URL getPrettyUrl(String alias, URL url) throws MalformedURLException {
+    public URL getPrettyUrl(String alias, URL oldUrl) throws MalformedURLException {
         User user = authenticateOrCreateUser(alias);
-        Set<PrettyUrl> prettyUrls=user.getUrls();
-        for (PrettyUrl prettyUrl : prettyUrls) {
-            if (prettyUrl.getOldUrl().equals(url)){
-                return new URL(prettyUrl.getNewUrl());
-            }
+        Optional<List<PrettyUrl>> prettyUrls = prettyUrlRepository.findByUserId(user.getId());
+        if (prettyUrls.isEmpty()){
+            PrettyUrl prettyUrl = buildPrettyURL(oldUrl, user);
+            addUrlToUser(prettyUrl,user);
+            return new URL(prettyUrl.getNewUrl());
         }
-        PrettyUrl prettyUrl = buildPrettyURL(url, user);
-        addUrlToUser(prettyUrl,user);
-        return new URL(prettyUrl.getNewUrl());
+        else{
+            for (PrettyUrl prettyUrl : prettyUrls.get()) {
+                if (prettyUrl.getOldUrl().equals(oldUrl)){
+                    log.info("Getting pretty from old {}",oldUrl);
+                    addUrlToUser(prettyUrl, user);
+                    return new URL(prettyUrl.getNewUrl());
+                }
+            }
+            log.info("URL is not found. Creating new Pretty oldUrl with old {}",oldUrl);
+            PrettyUrl prettyUrl = buildPrettyURL(oldUrl, user);
+            addUrlToUser(prettyUrl,user);
+            return new URL(prettyUrl.getNewUrl());
+        }
     }
 
     private User authenticateOrCreateUser(String alias){
         Optional<User> user = userService.getUserByAlias(alias);
+
+        log.info("Authenticate user with alias {}",alias);
         if (user.isEmpty()){
             return userService.createNewUser(alias);
         }
@@ -53,17 +63,26 @@ public class ConverterServiceImpl implements ConverterService {
         List<String> linkOfObject = List.of(new Object().toString().split("@"));
         String newPart = linkOfObject.get(1);
         String  newUrl = prettyHost + newPart;
-        PrettyUrl prettyUrl = new PrettyUrl(null,user,oldUrl,newUrl);
+
+        PrettyUrl prettyUrl = new PrettyUrl();
+        prettyUrl.setOldUrl(oldUrl);
+        prettyUrl.setNewUrl(newUrl);
+        prettyUrl.setUser(user);
         prettyUrlRepository.save(prettyUrl);
+        log.info("Saved prettyUrl with {}",prettyUrl.getNewUrl());
+
         return prettyUrl;
     }
 
     private boolean addUrlToUser(PrettyUrl newUrl,User user){
         Optional<User> userData = userRepository.findById(user.getId());
+
+        log.info("Adding url to user");
         if (userData.isPresent()){
-            Set<PrettyUrl> urls = userData.get().getUrls();
+            List<PrettyUrl> urls = userData.get().getUrls();
             urls.add(newUrl);
             userRepository.save(user);
+            log.info("Added {} to {}",newUrl,user.getAlias());
             return true;
         }
         else{

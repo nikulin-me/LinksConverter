@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Data
@@ -18,7 +18,7 @@ public class User {
 
     private String alias;
 
-    @OneToMany
-    private Set<PrettyUrl> urls;
+    @OneToMany(mappedBy = "user")
+    private List<PrettyUrl> urls;
 
 }

@@ -5,9 +5,10 @@ import lombok.Data;
 import javax.persistence.*;
 import java.net.URL;
 
+
 @Entity
 @Data
-public class PrettyUrl {
+public class PrettyUrl{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,4 +17,6 @@ public class PrettyUrl {
     private User user;
 
     private URL oldUrl;
+
+    private URL newUrl;
 }

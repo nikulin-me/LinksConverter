@@ -19,6 +19,6 @@ public class User {
     private String alias;
 
     @OneToMany
-    private Set<PrettyUrl> url;
+    private Set<PrettyUrl> urls;
 
 }

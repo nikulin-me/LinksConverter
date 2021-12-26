@@ -1,6 +1,5 @@
 package avito.converter.controller;
 
-import avito.converter.domain.PrettyUrl;
 import avito.converter.service.ConverterService;
 import avito.converter.service.CookiesHandler;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ public class ConverterController {
     public ResponseEntity<String> getPrettyUrl(@RequestParam("url") URL url,
                                                   @CookieValue(name = "alias") String alias){
         ResponseCookie cookie=cookiesHandler.getCookieByAlias(alias);
-        String prettyUrl = converterService.getUrlPretty(url);
+        String prettyUrl = converterService.getPrettyUrl(alias,url);
 
 
         return ResponseEntity.ok()

@@ -30,6 +30,7 @@ public class UserService{
 
     public User authenticateUser(String alias){
         Optional<User> userOpt = userRepository.findByAlias(alias);
+        System.out.println(userOpt);
         log.info("Authenticate {}",alias);
         return userOpt.orElseGet(() -> createNewUser(alias));
     }

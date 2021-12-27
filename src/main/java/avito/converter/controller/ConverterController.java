@@ -19,8 +19,8 @@ public class ConverterController {
     private final  ConverterService converterService;
 
     @GetMapping
-    public ResponseEntity<URL> getPrettyUrl(@RequestParam("url") URL url,
-                                                  @CookieValue(name = "alias") String alias) throws MalformedURLException {
+    public ResponseEntity<URL> makePrettyUrl(@RequestParam("url") URL url,
+                                             @CookieValue(name = "alias") String alias) throws MalformedURLException {
         ResponseCookie cookie=cookiesHandler.getCookieByAlias(alias);
         URL prettyUrl = converterService.createNewUrlFromOld(alias,url);
 

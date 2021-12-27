@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
@@ -21,4 +20,36 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<PrettyUrl> urls;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public List<PrettyUrl> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(List<PrettyUrl> urls) {
+        this.urls = urls;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", alias='" + alias + '\'' +
+                ", urls=" + urls +
+                '}';
+    }
 }

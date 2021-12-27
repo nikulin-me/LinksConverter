@@ -22,7 +22,7 @@ public class ConverterController {
     public ResponseEntity<URL> getPrettyUrl(@RequestParam("url") URL url,
                                                   @CookieValue(name = "alias") String alias) throws MalformedURLException {
         ResponseCookie cookie=cookiesHandler.getCookieByAlias(alias);
-        URL prettyUrl = converterService.getPrettyUrl(alias,url);
+        URL prettyUrl = converterService.createNewUrlFromOld(alias,url);
 
 
         return ResponseEntity.ok()

@@ -27,7 +27,10 @@ public class UserService{
         return userRepository.findAllAlias();
     }
 
-    public Optional<User> getUserByAlias(String alias){
-        return userRepository.findByAlias(alias);
+
+    public User authenticateUser(String alias){
+        Optional<User> userOpt = userRepository.findByAlias(alias);
+        log.info("Authenticate {}",alias);
+        return userOpt.orElseGet(() -> createNewUser(alias));
     }
 }

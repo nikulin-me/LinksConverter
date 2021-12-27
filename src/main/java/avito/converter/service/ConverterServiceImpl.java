@@ -24,42 +24,31 @@ public class ConverterServiceImpl implements ConverterService {
     private final UserService userService;
 
     @Override
-    public URL getPrettyUrl(String alias, URL oldUrl) throws MalformedURLException {
-        User user = authenticateOrCreateUser(alias);
+    public URL createNewUrlFromOld(String alias, URL oldUrl) throws MalformedURLException {
+        User user = userService.authenticateUser(alias);
         Optional<List<PrettyUrl>> prettyUrls = prettyUrlRepository.findByUserId(user.getId());
+
         if (prettyUrls.isEmpty()){
             PrettyUrl prettyUrl = buildPrettyURL(oldUrl, user);
-            addUrlToUser(prettyUrl,user);
+            addUrlToUser(prettyUrl,alias);
+            log.info("It`s newbie. Putting url {}", prettyUrl.getNewUrl());
             return new URL(prettyUrl.getNewUrl());
         }
         else{
             for (PrettyUrl prettyUrl : prettyUrls.get()) {
                 if (prettyUrl.getOldUrl().equals(oldUrl)){
                     log.info("Getting pretty from old {}",oldUrl);
-                    addUrlToUser(prettyUrl, user);
                     return new URL(prettyUrl.getNewUrl());
                 }
             }
             log.info("URL is not found. Creating new Pretty oldUrl with old {}",oldUrl);
             PrettyUrl prettyUrl = buildPrettyURL(oldUrl, user);
-            addUrlToUser(prettyUrl,user);
+            addUrlToUser(prettyUrl,alias);
             return new URL(prettyUrl.getNewUrl());
         }
     }
 
-    private User authenticateOrCreateUser(String alias){
-        Optional<User> user = userService.getUserByAlias(alias);
-
-        log.info("Authenticate user with alias {}",alias);
-        if (user.isEmpty()){
-            return userService.createNewUser(alias);
-        }
-        else{
-            return user.get();
-        }
-    }
-
-    private PrettyUrl buildPrettyURL(URL oldUrl, User user) throws MalformedURLException {
+    private PrettyUrl buildPrettyURL(URL oldUrl, User user){
         List<String> linkOfObject = List.of(new Object().toString().split("@"));
         String newPart = linkOfObject.get(1);
         String  newUrl = prettyHost + newPart;
@@ -74,19 +63,12 @@ public class ConverterServiceImpl implements ConverterService {
         return prettyUrl;
     }
 
-    private boolean addUrlToUser(PrettyUrl newUrl,User user){
-        Optional<User> userData = userRepository.findById(user.getId());
-
-        log.info("Adding url to user");
-        if (userData.isPresent()){
-            List<PrettyUrl> urls = userData.get().getUrls();
-            urls.add(newUrl);
-            userRepository.save(user);
-            log.info("Added {} to {}",newUrl,user.getAlias());
-            return true;
+    private void addUrlToUser(PrettyUrl newUrl,String username){
+        Optional<User> user = userRepository.findByAlias(username);
+        if (user.isPresent()){
+            user.get().getUrls().add(newUrl);
+            userRepository.save(user.get());
         }
-        else{
-            return false;
-        }
+        log.info("Added new url to user");
     }
 }

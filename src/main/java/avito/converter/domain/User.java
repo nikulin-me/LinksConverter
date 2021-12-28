@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,7 +20,7 @@ public class User {
     private String alias;
 
     @OneToMany(mappedBy = "user")
-    private List<PrettyUrl> urls;
+    private List<PrettyUrl> urls=new ArrayList<>();
 
     public Long getId() {
         return id;

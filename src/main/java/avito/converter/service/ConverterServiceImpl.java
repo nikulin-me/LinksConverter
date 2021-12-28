@@ -64,9 +64,10 @@ public class ConverterServiceImpl implements ConverterService {
         return prettyUrl;
     }
 
-    private void addUrlToUser(PrettyUrl newUrl,String username){
+    public void addUrlToUser(PrettyUrl newUrl,String username){
         Optional<User> user = userRepository.findByAlias(username);
         if (user.isPresent()){
+            log.info("Trying add new url for {}",username );
             user.get().getUrls().add(newUrl);
             userRepository.save(user.get());
         }

@@ -6,27 +6,34 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 @RestController
-@RequestMapping("/convert")
+@RequestMapping("/converter")
 @RequiredArgsConstructor
 public class ConverterController {
     private final CookiesHandler cookiesHandler;
     private final  ConverterService converterService;
 
     @GetMapping
-    public ResponseEntity<URL> makePrettyUrl(@RequestParam("url") URL url,
-                                             @CookieValue(name = "alias") String alias) throws MalformedURLException {
-        ResponseCookie cookie=cookiesHandler.getCookieByAlias(alias);
-        URL prettyUrl = converterService.createNewUrlFromOld(alias,url);
+    public ResponseEntity<URL> makePrettyUrl(HttpServletRequest request,
+                                             @RequestParam("url") URL url,
+                                             HttpServletResponse response) throws MalformedURLException {
 
+        Cookie cookie = cookiesHandler.buildCookie(request);
+        response.addCookie(cookie);
+        URL prettyUrl = converterService.createNewUrlFromOld(cookie.getValue(), url);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE,cookie.toString())
                 .body(prettyUrl);
     }
 }

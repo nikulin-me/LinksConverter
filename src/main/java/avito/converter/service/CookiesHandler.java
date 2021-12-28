@@ -18,17 +18,6 @@ public class CookiesHandler {
     private final String COOKIE_NAME = "alias";
     private final int COOKIE_AGE = 60 * 60 * 24 * 7;
 
-    private Optional<Cookie> getCookieByAlias(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        log.info("Catch all cookies");
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(COOKIE_NAME)) {
-                log.info("Cathced cookie with {}", cookie.getValue());
-                return Optional.of(cookie);
-            }
-        }
-        return Optional.empty();
-    }
 
     public Cookie buildCookie(HttpServletRequest request) {
         Optional<Cookie> cookie = getCookieByAlias(request);
@@ -42,6 +31,18 @@ public class CookiesHandler {
             return cookieBuilder;
         }
         return cookie.get();
+    }
+
+    private Optional<Cookie> getCookieByAlias(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        log.info("Catch all cookies");
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(COOKIE_NAME)) {
+                log.info("Cathced cookie with {}", cookie.getValue());
+                return Optional.of(cookie);
+            }
+        }
+        return Optional.empty();
     }
 
 

@@ -10,17 +10,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.BDDAssertions.then;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
@@ -40,8 +41,34 @@ class ConverterServiceImplTest {
     }
 
     @Test
-    void createNewUrlFromOld() {
+    void shouldReturnExistingURL() throws MalformedURLException {
+        //given
+        User user = new User();
+        user.setAlias("user_0");
+        user.setId(1L);
+        URL oldUrl=new URL("http://lol.com");
+        PrettyUrl expectedPrettyUrl = new PrettyUrl(1L, user, oldUrl, "http://no.sky/213");
+        user.setUrls(List.of(expectedPrettyUrl));
+        when(userRepository.findByAlias(user.getAlias())).thenReturn(Optional.of(user));
 
+        //when
+
+    }
+    @Test
+    void shouldReturnNewURL() {
+        //given
+
+        //when
+
+        //then
+    }
+    @Test
+    void shouldReturnNewURLOfNewUser() {
+        //given
+
+        //when
+
+        //then
     }
 
     @Test

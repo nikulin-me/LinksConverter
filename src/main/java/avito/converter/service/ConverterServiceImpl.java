@@ -26,9 +26,9 @@ public class ConverterServiceImpl implements ConverterService {
     @Override
     public URL createNewUrlFromOld(String alias, URL oldUrl) throws MalformedURLException {
         User user = userService.authenticateUser(alias);
-        System.out.println(user);
         Optional<List<PrettyUrl>> prettyUrls = prettyUrlRepository.findByUserId(user.getId());
 
+        log.info("Trying to upload new URL");
         if (prettyUrls.isEmpty()){
             PrettyUrl prettyUrl = buildPrettyURL(oldUrl, user);
             addUrlToUser(prettyUrl,alias);

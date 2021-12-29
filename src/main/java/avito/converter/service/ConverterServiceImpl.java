@@ -3,7 +3,6 @@ package avito.converter.service;
 import avito.converter.domain.PrettyUrl;
 import avito.converter.domain.User;
 import avito.converter.repository.PrettyUrlRepository;
-import avito.converter.repository.UserRepository;
 import avito.converter.repository.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,25 +31,26 @@ public class ConverterServiceImpl implements ConverterService {
             PrettyUrl prettyUrl = buildPrettyURL(oldUrl, user);
             addUrlToUser(prettyUrl,alias);
             log.info("It`s newbie. Putting url {}", prettyUrl.getNewUrl());
-            return new URL(prettyUrl.getNewUrl());
+            return prettyUrl.getNewUrl();
         }
         else{
             for (PrettyUrl prettyUrl : prettyUrls.get()) {
-                if (prettyUrl.getOldUrl().equals(oldUrl)){
-                    log.info("Getting pretty from old {}",oldUrl);
-                    return new URL(prettyUrl.getNewUrl());
+                if (prettyUrl.getOldUrl().equals(oldUrl)) {
+                    log.info("Getting pretty from old {}", oldUrl);
+                    return prettyUrl.getNewUrl();
                 }
             }
+            //if url is not found and user urls is not empty
             log.info("URL is not found. Creating new Pretty oldUrl with old {}",oldUrl);
             PrettyUrl prettyUrl = buildPrettyURL(oldUrl, user);
             addUrlToUser(prettyUrl,alias);
-            return new URL(prettyUrl.getNewUrl());
+            return prettyUrl.getNewUrl();
         }
     }
-    private PrettyUrl buildPrettyURL(URL oldUrl, User user){
+    private PrettyUrl buildPrettyURL(URL oldUrl, User user) throws MalformedURLException {
         List<String> linkOfObject = List.of(new Object().toString().split("@"));
         String newPart = linkOfObject.get(1);
-        String  newUrl = prettyHost + newPart;
+        URL  newUrl =new URL( prettyHost + newPart);
 
         PrettyUrl prettyUrl = new PrettyUrl();
         prettyUrl.setOldUrl(oldUrl);

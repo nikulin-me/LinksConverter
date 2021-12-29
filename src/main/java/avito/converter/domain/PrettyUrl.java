@@ -25,5 +25,5 @@ public class PrettyUrl{
 
     private URL oldUrl;
 
-    private String newUrl;
+    private URL newUrl;
 }

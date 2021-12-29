@@ -47,7 +47,6 @@ public class ConverterServiceImpl implements ConverterService {
             return new URL(prettyUrl.getNewUrl());
         }
     }
-
     private PrettyUrl buildPrettyURL(URL oldUrl, User user){
         List<String> linkOfObject = List.of(new Object().toString().split("@"));
         String newPart = linkOfObject.get(1);

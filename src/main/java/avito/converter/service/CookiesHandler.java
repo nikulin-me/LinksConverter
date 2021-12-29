@@ -15,11 +15,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CookiesHandler {
     private final UserService userService;
-    private final String COOKIE_NAME = "alias";
-    private final int COOKIE_AGE = 60 * 60 * 24 * 7;
+    private  final String COOKIE_NAME = "alias";
+    private  final int COOKIE_AGE = 60 * 60 * 24 * 7;
 
 
-    public Cookie buildCookie(HttpServletRequest request) {
+    public Cookie getAliasCookie(HttpServletRequest request) {
         Optional<Cookie> cookie = getCookieByAlias(request);
         if (cookie.isEmpty()) {
             String usernameCookie = addingAliasValueCookie();
@@ -33,7 +33,7 @@ public class CookiesHandler {
         return cookie.get();
     }
 
-    private Optional<Cookie> getCookieByAlias(HttpServletRequest request) {
+    private  Optional<Cookie> getCookieByAlias(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         log.info("Catch all cookies");
         for (Cookie cookie : cookies) {
@@ -46,13 +46,13 @@ public class CookiesHandler {
     }
 
 
-    private String addingAliasValueCookie() {
+    private  String addingAliasValueCookie() {
         List<String> aliasList = userService.getAllUsersAlias();
         int size = aliasList.size();
 
         log.info("User not found. Creating new cookie");
         String aliasUser = "user_" + size;
-        userService.createNewUser(aliasUser);
+        userService.authenticateUser(aliasUser);
         Cookie alias = new Cookie(COOKIE_NAME, aliasUser);
 
         return alias.getValue();

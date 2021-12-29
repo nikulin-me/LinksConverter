@@ -19,15 +19,13 @@ import java.util.Optional;
 
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
 class ConverterServiceImplTest {
-    @Mock
-    private UserRepository userRepository;
     @Mock
     private PrettyUrlRepository prettyUrlRepository;
     @Mock
@@ -37,38 +35,42 @@ class ConverterServiceImplTest {
 
     @BeforeEach
     void setUp(){
-        converterService=new ConverterServiceImpl(prettyUrlRepository,userRepository,userService);
+        converterService=new ConverterServiceImpl(prettyUrlRepository,userService);
     }
 
     @Test
     void shouldReturnExistingURL() throws MalformedURLException {
         //given
         User user = new User();
-        user.setAlias("user_0");
         user.setId(1L);
-        URL oldUrl=new URL("http://lol.com");
-        PrettyUrl expectedPrettyUrl = new PrettyUrl(1L, user, oldUrl, "http://no.sky/213");
-        user.setUrls(List.of(expectedPrettyUrl));
-        when(userRepository.findByAlias(user.getAlias())).thenReturn(Optional.of(user));
+        user.setAlias("user_0");
+        URL oldUrl = new URL("http://old");
+        PrettyUrl expectedUrl = new PrettyUrl(1L, user, oldUrl, "http://ssf");
+        user.getUrls().add(expectedUrl);
+        given(userService.authenticateUser(user.getAlias())).willReturn(user);
+        given(prettyUrlRepository.findByUserId(user.getId())).willReturn(Optional.of(user.getUrls()));
 
         //when
-
-    }
-    @Test
-    void shouldReturnNewURL() {
-        //given
-
-        //when
+        converterService.createNewUrlFromOld(user.getAlias(),oldUrl);
 
         //then
+        verify(userService,never()).updateUserData(user);
     }
     @Test
-    void shouldReturnNewURLOfNewUser() {
+    void shouldReturnNewURL() throws MalformedURLException {
         //given
+        User user = new User();
+        user.setId(1L);
+        user.setAlias("user_0");
+        URL oldUrl = new URL("http://old.ru");
+        given(userService.authenticateUser(user.getAlias())).willReturn(user);
 
         //when
+        converterService.createNewUrlFromOld(user.getAlias(),oldUrl);
+
 
         //then
+        then(user.getUrls().size()).isEqualTo(1);
     }
 
     @Test
@@ -83,7 +85,7 @@ class ConverterServiceImplTest {
         user.setAlias("user_0");
         User expectedUser=new User();
         expectedUser.setUrls(List.of(new PrettyUrl(),new PrettyUrl(),new PrettyUrl()));
-        when(userRepository.findByAlias(any())).thenReturn(Optional.of(user));
+        when(userService.authenticateUser(any())).thenReturn(user);
 
         //when
         converterService.addUrlToUser(new PrettyUrl(), user.getAlias());

@@ -19,7 +19,7 @@ public class User {
 
     private String alias;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<PrettyUrl> urls=new ArrayList<>();
 
     public Long getId() {

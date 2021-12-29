@@ -20,7 +20,6 @@ import java.util.Optional;
 public class ConverterServiceImpl implements ConverterService {
     private final String prettyHost="http://no.sky/";
     private final PrettyUrlRepository prettyUrlRepository;
-    private final UserRepository userRepository;
     private final UserService userService;
 
     @Override
@@ -65,11 +64,11 @@ public class ConverterServiceImpl implements ConverterService {
     }
 
     public void addUrlToUser(PrettyUrl newUrl,String username){
-        Optional<User> user = userRepository.findByAlias(username);
+        Optional<User> user = Optional.ofNullable(userService.authenticateUser(username));
         if (user.isPresent()){
             log.info("Trying add new url for {}",username );
             user.get().getUrls().add(newUrl);
-            userRepository.save(user.get());
+            userService.updateUserData(user.get());
         }
         log.info("Added new url to user");
     }

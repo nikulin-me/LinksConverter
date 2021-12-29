@@ -33,4 +33,8 @@ public class UserService{
         log.info("Authenticate {}",alias);
         return userOpt.orElseGet(() -> createNewUser(alias));
     }
+
+    public void updateUserData(User user){
+        userRepository.save(user);
+    }
 }

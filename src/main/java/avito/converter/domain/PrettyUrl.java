@@ -26,4 +26,14 @@ public class PrettyUrl{
     private URL oldUrl;
 
     private URL newUrl;
+
+    @Override
+    public String toString() {
+        return "PrettyUrl{" +
+                "id=" + id +
+                ", userId=" + user.getId() +
+                ", oldUrl=" + oldUrl +
+                ", newUrl=" + newUrl +
+                '}';
+    }
 }

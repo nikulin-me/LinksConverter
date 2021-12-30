@@ -45,7 +45,7 @@ class ConverterServiceImplTest {
         user.setId(1L);
         user.setAlias("user_0");
         URL oldUrl = new URL("http://old");
-        PrettyUrl expectedUrl = new PrettyUrl(1L, user, oldUrl, "http://ssf");
+        PrettyUrl expectedUrl = new PrettyUrl(1L, user, oldUrl, new URL("http://ssf"));
         user.getUrls().add(expectedUrl);
         given(userService.authenticateUser(user.getAlias())).willReturn(user);
         given(prettyUrlRepository.findByUserId(user.getId())).willReturn(Optional.of(user.getUrls()));

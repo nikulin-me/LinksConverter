@@ -2,22 +2,19 @@ package avito.converter.controller;
 
 import avito.converter.domain.PrettyUrl;
 import avito.converter.service.CookiesHandler;
-import avito.converter.service.UrlSenderService;
+import avito.converter.service.sender.UrlSenderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/converter")

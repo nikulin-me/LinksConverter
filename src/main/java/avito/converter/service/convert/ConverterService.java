@@ -1,4 +1,4 @@
-package avito.converter.service;
+package avito.converter.service.convert;
 
 import avito.converter.domain.PrettyUrl;
 

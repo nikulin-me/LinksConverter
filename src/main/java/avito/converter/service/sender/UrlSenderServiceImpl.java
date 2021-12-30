@@ -1,9 +1,10 @@
-package avito.converter.service;
+package avito.converter.service.sender;
 
 import avito.converter.domain.PrettyUrl;
 import avito.converter.domain.User;
 import avito.converter.repository.PrettyUrlRepository;
 import avito.converter.repository.UserService;
+import avito.converter.service.convert.ConverterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

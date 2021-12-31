@@ -1,5 +1,6 @@
 package avito.converter.service.validator;
 
+import avito.converter.exception.InvalidURLException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -7,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -23,26 +25,24 @@ class ValidUrlCheckerImplTest {
     }
 
     @Test
-    void shouldReturnTrueCauseExistingURL() throws IOException {
+    void shouldReturnTrueCauseExistentURL() throws IOException {
         //given
         URL url = new URL("https://github.com/temalead");
 
         //when
-        boolean isValid = checker.validateURl(url);
+        Serializable isValid = checker.validateURl(url);
+        System.out.println(isValid);
 
         //then
         then(isValid).isEqualTo(true);
 
     }
     @Test
-    void shouldReturnFalseCauseNonExistingURL() throws IOException {
+    void shouldReturnExceptionCauseNonexistentURL() throws IOException {
         //given
         URL url = new URL("https://github.com/temalsafasdfsadfead");
 
-        //when
-        boolean isValid = checker.validateURl(url);
-
-        //then
-        then(isValid).isEqualTo(false);
+        //throws
+        assertThrows(InvalidURLException.class,()->checker.validateURl(url));
     }
 }

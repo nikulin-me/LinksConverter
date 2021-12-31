@@ -2,7 +2,7 @@ package avito.converter.service.sender;
 
 import avito.converter.domain.PrettyUrl;
 import avito.converter.domain.User;
-import avito.converter.exception.NotValidURL;
+import avito.converter.exception.InvalidURLException;
 import avito.converter.repository.PrettyUrlRepository;
 import avito.converter.repository.UserService;
 import avito.converter.service.convert.ConverterService;
@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +28,7 @@ public class UrlSenderServiceImpl implements UrlSenderService {
     @Override
     public List<PrettyUrl> getAllUrls(String alias) {
         User user = userService.authenticateUser(alias);
-        log.info("Got all urls from {}",alias);
+        log.info("Got all urls from {}", alias);
         Optional<List<PrettyUrl>> urls = prettyUrlRepository.findByUserId(user.getId());
         return urls.orElse(null);
 
@@ -37,17 +36,19 @@ public class UrlSenderServiceImpl implements UrlSenderService {
 
     @Override
     public URL createNewUrlFromOld(String alias, URL oldUrl) throws IOException {
-        log.info("Creating newURL for {}",alias);
-        if (validUrlChecker.validateURl(oldUrl)){
-            throw new NotValidURL();
+        log.info("Creating newURL for {}", alias);
+        try {
+            validUrlChecker.validateURl(oldUrl);
+        } catch (IOException e) {
+            throw new InvalidURLException("Doesn`t exist", e);
         }
-        return converterService.createNewUrlFromOld(alias,oldUrl);
+        return converterService.createNewUrlFromOld(alias, oldUrl);
     }
 
     @Override
     public URL getOldUrl(URL newUrl) {
         PrettyUrl url = prettyUrlRepository.findByNewUrl(newUrl);
-        log.info("Redirecting to {} from {}",url,newUrl);
+        log.info("Redirecting to {} from {}", url, newUrl);
         return url.getOldUrl();
     }
 }

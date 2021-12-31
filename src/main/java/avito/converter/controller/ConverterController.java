@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -26,7 +27,7 @@ public class ConverterController {
     @GetMapping
     public ResponseEntity<URL> makePrettyUrl(HttpServletRequest request,
                                              @RequestParam("url") URL url,
-                                             HttpServletResponse response) throws MalformedURLException {
+                                             HttpServletResponse response) throws IOException {
 
         Cookie cookie = cookiesHandler.getAliasCookie(request);
         response.addCookie(cookie);

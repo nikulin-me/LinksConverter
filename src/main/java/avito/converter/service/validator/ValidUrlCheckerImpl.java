@@ -23,6 +23,7 @@ public class ValidUrlCheckerImpl implements ValidUrlChecker {
             log.error("{} doesn`t exist", url);
             throw  new InvalidURLException();
         } else {
+            log.info("{} is valid",url);
             return true;
         }
     }

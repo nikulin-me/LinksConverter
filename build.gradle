@@ -32,6 +32,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-test'
 
     implementation 'org.postgresql:postgresql'
+    implementation 'org.hibernate:hibernate-validator:7.0.2.Final'
+
+
 }
 
 test {

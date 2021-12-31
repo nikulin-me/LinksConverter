@@ -1,9 +1,8 @@
 package avito.converter.service.validator;
 
-import org.springframework.stereotype.Service;
+import java.io.IOException;
+import java.net.URL;
 
-@Service
-public class ValidUrlChecker {
-
-
+public interface ValidUrlChecker {
+    boolean validateURl(URL url) throws IOException;
 }

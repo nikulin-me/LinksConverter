@@ -8,4 +8,8 @@ public class NotValidURL extends RuntimeException{
     public NotValidURL(String message, Throwable cause) {
         super(message, cause);
     }
+
+    public NotValidURL() {
+        super();
+    }
 }

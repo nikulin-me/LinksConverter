@@ -44,7 +44,7 @@ class UrlSenderServiceImplTest {
         user.setAlias("user_0");
 
         //then
-        assertThrows(InvalidURLException.class,()->sender.createNewUrlFromOld(user.getAlias(),nonexistentUrl));
+        assertThrows(IOException.class,()->sender.createNewUrlFromOld(user.getAlias(),nonexistentUrl));
     }
 
     @Test

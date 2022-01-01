@@ -35,12 +35,12 @@ public class UrlSenderServiceImpl implements UrlSenderService {
     }
 
     @Override
-    public URL createNewUrlFromOld(String alias, URL oldUrl) throws IOException {
+    public URL createNewUrlFromOld(String alias, URL oldUrl) throws IOException,InvalidURLException {
         log.info("Creating newURL for {}", alias);
         try {
             validUrlChecker.validateURl(oldUrl);
-        } catch (IOException e) {
-            throw new InvalidURLException("Doesn`t exist", e);
+        } catch (InvalidURLException e) {
+            e.printStackTrace();
         }
         return converterService.createNewUrlFromOld(alias, oldUrl);
     }

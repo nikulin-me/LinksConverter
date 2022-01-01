@@ -1,6 +1,8 @@
 package avito.converter.controller;
 
 import avito.converter.domain.PrettyUrl;
+import avito.converter.repository.PrettyUrlService;
+import avito.converter.repository.UserService;
 import avito.converter.service.CookiesHandler;
 import avito.converter.service.sender.UrlSenderService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import java.util.List;
 public class ConverterController {
     private final CookiesHandler cookiesHandler;
     private final UrlSenderService urlSenderService;
+    private final PrettyUrlService prettyUrlService;
 
     @GetMapping
     public ResponseEntity<URL> makePrettyUrl(HttpServletRequest request,
@@ -49,5 +52,13 @@ public class ConverterController {
     public ResponseEntity<Void> redirectToUglyUrl(@RequestParam("url") URL newUrl) {
         URL oldUrl = urlSenderService.getOldUrl(newUrl);
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(String.valueOf(oldUrl))).build();
+    }
+
+    @PutMapping("/{old}")
+    public ResponseEntity<URL> updateURL(@PathVariable("old") Long oldURL,
+                                        @RequestParam("url") URL url){
+        URL updatableUrl = prettyUrlService.getUrl(oldURL);
+        URL updatedUrl = prettyUrlService.updateURL(updatableUrl, url);
+        return ResponseEntity.ok(updatedUrl);
     }
 }

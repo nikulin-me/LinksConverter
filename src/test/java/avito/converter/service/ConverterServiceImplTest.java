@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.net.MalformedURLException;
@@ -30,12 +31,18 @@ class ConverterServiceImplTest {
     private PrettyUrlRepository prettyUrlRepository;
     @Mock
     private UserService userService;
+    @Value("${hostname}")
+    private final String prettyHost;
 
     private ConverterServiceImpl converterService;
 
+    ConverterServiceImplTest(String prettyHost) {
+        this.prettyHost = prettyHost;
+    }
+
     @BeforeEach
     void setUp(){
-        converterService=new ConverterServiceImpl(prettyUrlRepository,userService);
+        converterService=new ConverterServiceImpl(prettyHost,prettyUrlRepository,userService);
     }
 
     @Test

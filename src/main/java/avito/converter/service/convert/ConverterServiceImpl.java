@@ -6,6 +6,7 @@ import avito.converter.repository.PrettyUrlRepository;
 import avito.converter.repository.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
@@ -17,7 +18,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ConverterServiceImpl implements ConverterService {
-    private final String prettyHost="http://no.sky/";
+    @Value("${hostname}")
+    private final String prettyHost;
     private final PrettyUrlRepository prettyUrlRepository;
     private final UserService userService;
 
@@ -50,7 +52,7 @@ public class ConverterServiceImpl implements ConverterService {
     private PrettyUrl buildPrettyURL(URL oldUrl, User user) throws MalformedURLException {
         List<String> linkOfObject = List.of(new Object().toString().split("@"));
         String newPart = linkOfObject.get(1);
-        URL  newUrl =new URL( prettyHost + newPart);
+        URL  newUrl =new URL( prettyHost +"/"+ newPart);
 
         PrettyUrl prettyUrl = new PrettyUrl();
         prettyUrl.setOldUrl(oldUrl);

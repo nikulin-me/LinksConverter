@@ -54,9 +54,9 @@ public class ConverterController {
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(String.valueOf(oldUrl))).build();
     }
 
-    @PutMapping("/{old}")
+    @PutMapping("urls/{old}")
     public ResponseEntity<URL> updateURL(@PathVariable("old") Long oldURL,
-                                        @RequestParam("url") URL url){
+                                        @RequestParam("url") URL url) throws MalformedURLException {
         URL updatableUrl = prettyUrlService.getUrl(oldURL);
         URL updatedUrl = prettyUrlService.updateURL(updatableUrl, url);
         return ResponseEntity.ok(updatedUrl);

@@ -16,7 +16,7 @@ import java.util.Optional;
 public class PrettyUrlService {
     private final PrettyUrlRepository repository;
     @Value("${hostname}")
-    private final String hostname;
+    private  String hostname;
 
 
     public URL updateURL(URL oldURL, URL url) throws MalformedURLException {

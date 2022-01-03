@@ -19,9 +19,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ConverterServiceImpl implements ConverterService {
     @Value("${hostname}")
-    private final String prettyHost;
+    private String prettyHost;
     private final PrettyUrlRepository prettyUrlRepository;
     private final UserService userService;
+
+
 
     @Override
     public URL createNewUrlFromOld(String alias, URL oldUrl) throws MalformedURLException {
